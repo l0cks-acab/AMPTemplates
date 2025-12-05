@@ -1,9 +1,10 @@
 {
-	"id": "3d61abcd-2cce-4b1c-80cc-4fe70db7f351",
-	"authors": ["CubeCoders Limited", "AMP Community", "l0cks-acab"],
-	"origin": "https://github.com/l0cks-acab/AMPTemplates.git",
-	"url": "https://github.com/l0cks-acab/AMPTemplates",
-	"imagefile": "",
-	"prefix": "",
-	"repotype": "AppTemplates"
+    "id": "ef2a3a75-6100-437d-8607-a146fde2a81f",
+    "authors": [
+        "l0cks-acab - Made with AMP Config Generator"
+    ],
+    "origin": "https://github.com/l0cks-acab - Made with AMP Config Generator/AMPTemplates.git",
+    "url": "https://github.com/l0cks-acab - Made with AMP Config Generator/AMPTemplates",
+    "imagefile": "",
+    "prefix": "l0cks-acab - Made with AMP Config Generator"
 }
