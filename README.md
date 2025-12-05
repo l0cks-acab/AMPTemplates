@@ -79,7 +79,23 @@ Then upload the `serverfiles/` folder to your AMP instance using:
 
 ## Configuration
 
-The template provides the following configurable settings through AMP's interface. These can be configured in the **Settings** section of your AMP instance:
+### Configurable Settings
+
+The template uses a config file approach to manage server settings. Settings are configured through the AMP interface and automatically written to `nzp/AMP_server.cfg`, which is loaded when the server starts.
+
+The template uses:
+- `nazi-zombies-portableconfig.json` - Defines the configurable settings in the AMP interface
+- `nazi-zombies-portablemetaconfig.json` - Defines the config file location and template
+- Config file: `nzp/AMP_server.cfg` - Where settings are written and loaded from
+
+These settings should appear in the **Settings** tab of your AMP instance. Default values are defined in the config file:
+
+- **Protocol Name**: `NZP-REBOOT` (default - for desktop clients)
+- **Map**: `ndu` (default - Nacht der Untoten)
+
+### Available Settings
+
+The following settings are available to configure through the AMP interface:
 
 - **Protocol Name** (`com_protocolname`): Server protocol identifier (default: "NZP-REBOOT")
   - Use "NZP-REBOOT" for desktop clients
@@ -96,6 +112,23 @@ The template provides the following configurable settings through AMP's interfac
   - Lower values = higher tickrate but more bandwidth
 - **Maximum Tick Rate** (`sv_maxtic`): Maximum server tick rate (default: 1000)
   - Higher values = smoother gameplay but more CPU usage
+
+### Manual Configuration via Console
+
+If the Settings tab is not available, you can configure settings manually via the server console:
+
+1. Go to your AMP instance → **Console** tab
+2. While the server is running, type these commands:
+
+```bash
+set com_protocolname NZP-REBOOT
+set sv_port 27500
+set hostname "NZP Server"
+set maxclients 8
+set sv_public 1
+```
+
+**Note**: Settings changed via console will reset when the server restarts. To make changes permanent, add them to the startup command in the **Configuration** tab → **Startup/Command Line** section using the format `+cvar value` (e.g., `+com_protocolname NZP-REBOOT`).
 
 ## Usage
 
@@ -120,6 +153,31 @@ The template defines one port that AMP will manage:
 The WebSocket/TCP port (`sv_port_tcp`) is configured via the server settings but not managed by AMP's port system. Make sure the UDP port is open in your firewall if you want the server to be accessible from the internet.
 
 ## Troubleshooting
+
+### Settings not appearing in AMP interface
+
+If the configurable settings don't appear in the **Settings** tab:
+
+1. **Refresh the template**:
+   - Go to **Configuration** → **Instance Deployment** in AMP
+   - Click **"Fetch Latest"** or **"Update Templates"** button
+   - Wait for the process to complete
+   - Refresh your browser page (F5 or Ctrl+R)
+
+2. **Verify template files are loaded**:
+   - Check that `nazi-zombies-portableconfig.json` is present in the template directory
+   - Ensure the config file is valid JSON (no syntax errors)
+
+3. **Recreate the instance** (if settings still don't appear):
+   - Create a new instance using the updated template
+   - The settings should appear in the new instance's **Settings** tab
+
+4. **Check AMP version**:
+   - Ensure you're using AMP version 2.4.6.6 or newer (as specified in the template)
+   - Older versions may not support configurable settings properly
+
+5. **Manual configuration**:
+   - If settings don't appear, you can still configure via console (see Manual Configuration section below)
 
 ### Server won't start / "Unable to start the application" / Permission errors
 
@@ -156,6 +214,42 @@ This error usually means the executable doesn't have execute permissions. Here's
 - Review the AMP console/logs for more specific error messages
 - If you're using the SDL version (`nzportable64-sdl`), ensure SDL2 libraries are installed on your server
 
+### "Target not registered" error when connecting
+
+If players see "target not registered" when trying to connect:
+
+1. **Protocol Name Mismatch** (Most Common Cause):
+   - The protocol name on the server must exactly match what the client expects
+   - **For desktop clients**: The server must use `NZP-REBOOT`
+   - **For web clients**: The server must use `NZP-REBOOT-WEB`
+   - **Fix via Console** (if Settings tab is not available):
+     - Go to your AMP instance → **Console** tab
+     - Type: `set com_protocolname NZP-REBOOT`
+     - Press Enter
+     - The server should accept connections immediately
+   - **Fix via Startup Command** (permanent):
+     - Go to your AMP instance → **Configuration** tab
+     - Find the "Startup/Command Line" section
+     - Ensure the command line includes: `+com_protocolname NZP-REBOOT`
+     - Save and restart the server
+   - **Verify**: Check the server console to confirm the protocol name is set correctly
+
+2. **Server Not Fully Started**:
+   - The server may still be initializing when the connection is attempted
+   - Wait a few seconds after server start before connecting
+   - Check the server console to see if it's fully initialized
+
+3. **Port Mismatch**:
+   - Ensure the client is connecting to the correct port
+   - Verify the `sv_port` setting matches the port the client is using
+   - Check that the port configured in AMP matches the `sv_port` setting
+   - You can set the port via console: `set sv_port 27500` (or whatever port you're using)
+
+4. **Server Console Check**:
+   - Look at the server console logs when a player tries to connect
+   - Check for any error messages or connection attempts being logged
+   - Verify the server is actually receiving the connection request
+
 ### Players can't connect / SCTP/DTLS errors
 
 If you see errors like `SCTP Abort` or `DTLS Terminated` when players try to connect:
@@ -168,7 +262,7 @@ If you see errors like `SCTP Abort` or `DTLS Terminated` when players try to con
      ```
      set com_protocolname NZP-REBOOT
      ```
-   - Or add to startup: `+com_protocolname NZP-REBOOT`
+   - Or configure in AMP Settings → "Protocol Name" setting
 
 2. **Verify Port Configuration**:
    - Desktop clients connect via UDP (default port 27500)
@@ -185,6 +279,34 @@ If you see errors like `SCTP Abort` or `DTLS Terminated` when players try to con
    - Ensure the UDP port is open in your firewall
    - Verify the server is set to public if you want it listed
    - Check NAT/port forwarding settings if behind a router
+
+### AMP says port is not listening
+
+If AMP indicates that the UDP port is not listening:
+
+1. **This is often normal for UDP ports**:
+   - UDP ports are connectionless and don't "listen" the same way TCP ports do
+   - AMP may have difficulty detecting UDP port binding, which is a known limitation
+   - The server may still be working correctly even if AMP shows the port as not listening
+
+2. **Verify the port matches**:
+   - Check the port number configured in AMP's port settings
+   - Ensure the `sv_port` setting in your instance's Settings matches the port number in AMP
+   - For example, if AMP is managing port 27015, set `sv_port` to 27015
+   - The default port is 27500 - if you changed it in AMP, update `sv_port` to match
+
+3. **Test if the server is actually working**:
+   - Try connecting with a client - if connections work, the port is functioning correctly
+   - Check the server console logs for any port binding errors
+   - Verify the port is open in your firewall
+
+4. **Verify port binding manually** (Linux):
+   ```bash
+   netstat -unlp | grep [PORT_NUMBER]
+   # or
+   ss -unlp | grep [PORT_NUMBER]
+   ```
+   Replace `[PORT_NUMBER]` with your actual port (e.g., 27500 or 27015)
 
 ### Missing assets
 - Verify the directory structure matches the one in [Prerequisites](#prerequisites)

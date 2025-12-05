@@ -1,1 +1,8 @@
-[]
+[
+    {
+        "ConfigFile": "nzp/AMP_server.cfg",
+        "AutoMap": true,
+        "ConfigType": "template",
+        "ConfigFileTemplate": "nzp/AMP_server.cfg.template"
+    }
+]
