@@ -1,1 +1,85 @@
-[]
+[
+    {
+        "DisplayName": "Protocol Name",
+        "FieldName": "com_protocolname",
+        "InputType": "text",
+        "DefaultValue": "NZP-REBOOT",
+        "Description": "Server protocol identifier. Use 'NZP-REBOOT' for desktop clients or 'NZP-REBOOT-WEB' for web clients.",
+        "IncludeInCommandLine": true,
+        "Optional": false
+    },
+    {
+        "DisplayName": "Map",
+        "FieldName": "map",
+        "InputType": "text",
+        "DefaultValue": "ndu",
+        "Description": "The map to load on server start (e.g., 'ndu' for Nacht der Untoten).",
+        "IncludeInCommandLine": true,
+        "Optional": false
+    },
+    {
+        "DisplayName": "Server Port (UDP)",
+        "FieldName": "sv_port",
+        "InputType": "number",
+        "DefaultValue": 27500,
+        "Description": "UDP port for game connections. Must match the port configured in AMP's port settings.",
+        "IncludeInCommandLine": true,
+        "Optional": true
+    },
+    {
+        "DisplayName": "Server Port (TCP/WebSocket)",
+        "FieldName": "sv_port_tcp",
+        "InputType": "number",
+        "DefaultValue": 27501,
+        "Description": "TCP/WebSocket port for web client connections. Set to 0 to disable.",
+        "IncludeInCommandLine": true,
+        "Optional": true
+    },
+    {
+        "DisplayName": "Server Hostname",
+        "FieldName": "hostname",
+        "InputType": "text",
+        "DefaultValue": "NZP Server",
+        "Description": "Display name for your server in the server browser.",
+        "IncludeInCommandLine": true,
+        "Optional": true
+    },
+    {
+        "DisplayName": "Max Clients",
+        "FieldName": "maxclients",
+        "InputType": "number",
+        "DefaultValue": 8,
+        "Description": "Maximum number of players that can join the server (max: 64).",
+        "IncludeInCommandLine": true,
+        "Optional": true,
+        "MinValue": 1,
+        "MaxValue": 64
+    },
+    {
+        "DisplayName": "Public Server",
+        "FieldName": "sv_public",
+        "InputType": "boolean",
+        "DefaultValue": true,
+        "Description": "Whether the server should be publicly listed in the server browser.",
+        "IncludeInCommandLine": true,
+        "Optional": true
+    },
+    {
+        "DisplayName": "Minimum Tick Rate (seconds)",
+        "FieldName": "sv_mintic",
+        "InputType": "number",
+        "DefaultValue": 0.045,
+        "Description": "Minimum server tick rate in seconds (e.g., 0.045 = 45ms = ~22fps). Lower values = higher tickrate but more bandwidth.",
+        "IncludeInCommandLine": true,
+        "Optional": true
+    },
+    {
+        "DisplayName": "Maximum Tick Rate",
+        "FieldName": "sv_maxtic",
+        "InputType": "number",
+        "DefaultValue": 1000,
+        "Description": "Maximum server tick rate (higher = smoother gameplay, more CPU usage).",
+        "IncludeInCommandLine": true,
+        "Optional": true
+    }
+]

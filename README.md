@@ -10,146 +10,92 @@ Nazi Zombies Portable (NZP) is a Quake-based first-person shooter game featuring
 
 ## Prerequisites
 
-Before using this template, you need to download and set up the NZP server files. According to the [NZP Server Setup Documentation](https://docs.nzp.gay/server/server-setup), you need:
+Before using this template, you need to download and set up the NZP server files from the [NZP GitHub Releases](https://github.com/nzp-team/nzportable/releases) page.
 
-### 1. NZP-specific FTEQW Binary
+### Download Required Files
 
-Download the **nosdl** binary for your platform from the [NZP GitHub Releases](https://github.com/nzp-team/nzportable/releases) page:
+You need to download **3 files** from the NZP GitHub Releases page:
 
-- **For Linux**: `nzportable-linux64.zip` (or `nzportable-linux32.zip` for 32-bit)
-  - Extract to get `nzportable64` or `nzportable64-sdl` executable
-- **For Windows**: `nzportable-win64.zip` (or `nzportable-win32.zip` for 32-bit)
-  - Extract to get `nzportable.exe`
+1. **NZP Binary**: `nzportable-linux64.zip` (or `nzportable-win64.zip` for Windows)
+   - Extract to get the executable (`nzportable64-sdl` for Linux or `nzportable.exe` for Windows)
 
-**Important**: You need the **NZP-specific** FTEQW binary, not the standard FTEQW binary. The NZP-specific version includes modifications required for NZP.
+2. **Game Assets**: `pc-nzp-assets.zip`
+   - This contains all the game assets and will create the `nzp/` folder
 
-### 2. Game Assets
+3. **QuakeC Files**: 
+   - `fte-nzp-qc.zip`
+   - `standard-nzp-qc.zip`
+   - These contain the compiled QuakeC files (`.dat` files)
 
-Download `pc-nzp-assets.zip` from the [NZP GitHub Releases](https://github.com/nzp-team/nzportable/releases) page and extract it to the **same location as the binary**. This will create an `nzp` folder containing the game assets.
+### Setting Up the Server Files Directory
 
-### 3. QuakeC Files
-
-Download and extract both of the following into the `nzp` folder (inside the assets folder):
-
-- `fte-nzp-qc.zip` - Extract into the `nzp` folder
-- `standard-nzp-qc.zip` - Extract into the `nzp` folder
-
-After extracting both QuakeC files, you should see `.dat` files in the `nzp` folder. These are the compiled QuakeC files that the server needs to run.
-
-### File Placement in AMP
-
-Once you've created your AMP instance, upload the files to the instance's `serverfiles/` directory. The final structure should look like:
+After creating your AMP instance, you need to merge these 3 files into a `serverfiles/` directory with the following structure:
 
 ```
-AMP Instance/serverfiles/
-├── nzportable64-sdl          (Linux executable, or nzportable.exe on Windows)
-└── nzp/
-    ├── *.dat files            (from QuakeC archives)
-    └── (other NZP assets)
+serverfiles/
+├── nzportable64-sdl          ← Executable (from nzportable-linux64.zip)
+├── nzp/                      ← Assets folder (from pc-nzp-assets.zip)
+│   ├── csprogs.dat          ← QuakeC files go here (from fte-nzp-qc.zip)
+│   ├── menu.dat
+│   ├── qwprogs.dat
+│   └── (other assets)
+└── (config files if any)
 ```
 
-**Note**: 
-- The executable name may vary. On Linux, you might have `nzportable64`, `nzportable64-sdl`, or just `nzportable`. The template is configured for `nzportable64-sdl` on Linux and `nzportable.exe` on Windows.
-- If your executable has a different name, you can rename it to match the template configuration, or update the executable path in the AMP instance settings after creation.
+**Setup Steps:**
 
-## Installation
+1. Create a `serverfiles/` folder (or use the one created by AMP)
+2. Extract the **NZP binary** (`nzportable-linux64.zip`) and place the executable (`nzportable64-sdl`) directly in `serverfiles/`
+3. Extract **game assets** (`pc-nzp-assets.zip`) - this creates an `nzp/` folder. Place this `nzp/` folder directly in `serverfiles/`
+4. Extract **QuakeC files**:
+   - Extract `fte-nzp-qc.zip` into the `serverfiles/nzp/` folder
+   - Extract `standard-nzp-qc.zip` into the `serverfiles/nzp/` folder
+   - After extracting, you should see `.dat` files (like `csprogs.dat`, `menu.dat`, `qwprogs.dat`) in `serverfiles/nzp/`
 
-### Loading the Template into AMP
+5. Upload the entire `serverfiles/` folder to your AMP instance using:
+   - **AMP File Manager**: Navigate to your instance → **File Manager** → upload to `serverfiles/`
+   - **FTP/SFTP**: Upload directly to the server
+   - **SSH/Command Line**: Copy files to the serverfiles directory
 
-#### Method 1: Using AMP's Deployment Templates (Recommended)
-
-1. **Locate your AMP installation directory** on your server
-   - On Linux: Typically `/opt/amp` or `/home/amp`
-   - On Windows: Typically `C:\Program Files\AMP` or your installation location
-   - The path may also be shown in your AMP logs (e.g., `__VDS__ADS01`)
-
-2. **Navigate to the Deployment Templates folder**:
-   - Path: `ADS/Plugins/ADSModule/DeploymentTemplates/`
-   - If using a configuration repository, it may be: `ADS/Plugins/ADSModule/DeploymentTemplates/CubeCoders-AMPTemplates/`
-   - If the `DeploymentTemplates` directory doesn't exist, create it
-
-3. **Place the template files** in the DeploymentTemplates directory:
-   - Copy the following files directly into `DeploymentTemplates/`:
-     - `nzp.kvp`
-     - `nzpconfig.json`
-     - `nzpmetaconfig.json`
-   - **Important**: Files should be in the root of DeploymentTemplates, not in a subdirectory
-
-4. **Refresh AMP to recognize the template**:
-   - Log into the AMP web interface
-   - Navigate to **Configuration** → **Instance Deployment**
-   - Click **"Fetch Latest"** or **"Update Templates"** button
-   - Refresh your browser page
-
-5. **Create a new instance**:
-   - In the AMP web interface, click **"Create Instance"** or **"Add Instance"**
-   - **Important**: Templates appear as applications directly, not under "Generic Module"
-   - Look for **"nzp"** or **"Nazi Zombies Portable"** in the application/module list
-   - Select it and follow the instance creation wizard
-   - The template will automatically use the Generic Module backend
-
-#### Method 2: Using Configuration Repository (If Already Set Up)
-
-If you've already added the repository as a configuration source (as shown in your logs):
-
-1. The template should already be downloaded to: `Plugins/GenericModule/templates/nzp/`
-2. Go to **Configuration** → **Instance Deployment** in AMP
-3. Click **"Fetch Latest"** to refresh templates
-4. Create a new instance and look for "nzp" or "Generic" module
-
-#### Method 3: Manual Configuration
-
-If the template still doesn't appear:
-
-1. **Create a new Generic Module instance** manually:
-   - In AMP, go to **Instances** → **Create New Instance**
-   - If "Generic" isn't listed, you may need to enable it in AMP settings
-   - Some AMP versions require enabling Generic Module in **Configuration** → **Modules**
-
-2. **Manually configure** the instance using the template files:
-   - After creating a Generic instance, go to its **Configuration** tab
-   - Copy the contents of `nzp.kvp` into the instance's KVP/Startup settings
-   - Configure settings from `nzpconfig.json` in the Settings section
+**Important Notes:**
+- On Linux, make sure the executable has execute permissions: `chmod +x serverfiles/nzportable64-sdl`
+- The executable name may vary (`nzportable64-sdl`, `nzportable64`, or `nzportable.exe` on Windows). The template is configured for `nzportable64-sdl` on Linux. If your executable has a different name, either rename it or update the executable path in AMP instance settings after creation.
 
 ### Setting Up the Server Files
 
-After creating your AMP instance, you need to upload the downloaded NZP files to the instance's `serverfiles/` directory. You can do this via:
+After creating your AMP instance, follow the setup steps in the [Prerequisites](#prerequisites) section above to download and merge the 3 required files into a `serverfiles/` directory with the correct structure.
+
+Then upload the `serverfiles/` folder to your AMP instance using:
 
 1. **AMP File Manager**: Navigate to your instance → **File Manager** → upload files to `serverfiles/`
 2. **FTP/SFTP**: Connect to your server and upload files directly
 3. **SSH/Command Line**: Copy files directly to the serverfiles directory
 
-The directory structure inside `serverfiles/` should be:
-
-```
-serverfiles/
-├── nzportable64-sdl          (Linux) or nzportable.exe (Windows)
-└── nzp/
-    ├── *.dat files           (from fte-nzp-qc.zip and standard-nzp-qc.zip)
-    └── (all other NZP assets from pc-nzp-assets.zip)
-```
-
 **Important Notes**:
 - The executable must be in `serverfiles/` (not a subdirectory)
 - The `nzp/` folder with all assets must be directly in `serverfiles/` (alongside the executable)
 - Make sure the executable has execute permissions on Linux: `chmod +x serverfiles/nzportable64-sdl`
-- The template expects `nzportable64-sdl` on Linux. If your executable has a different name, either rename it or update the executable path in AMP instance settings after creation
+- Verify that the `.dat` files (like `csprogs.dat`, `menu.dat`, `qwprogs.dat`) are present in the `serverfiles/nzp/` folder
 
 ## Configuration
 
-The template provides the following configurable settings through AMP's interface:
+The template provides the following configurable settings through AMP's interface. These can be configured in the **Settings** section of your AMP instance:
 
-- **Server Port (UDP)**: Main game port for UDP connections (default: 27500)
-- **Server Port (TCP/WebSocket)**: WebSocket port for web client connections (default: 27501)
-- **Protocol Name**: Server protocol identifier (default: "NZP-REBOOT")
+- **Protocol Name** (`com_protocolname`): Server protocol identifier (default: "NZP-REBOOT")
   - Use "NZP-REBOOT" for desktop clients
   - Use "NZP-REBOOT-WEB" for web clients
-- **Map**: The map to load on server start (default: "ndu" - Nacht der Untoten)
-- **Minimum Tick Rate (seconds)**: How frequently physics frames are calculated in seconds (default: 0.045 = 45ms = ~22fps). Lower values = higher tickrate but more bandwidth.
-- **Maximum Tick Rate**: Maximum server tick rate (default: 1000)
-- **Public Server**: Whether the server should be publicly listed (default: true)
-- **Server Hostname**: Display name for your server (default: "NZP Server")
-- **Max Clients**: Maximum number of players (default: 32, max: 64)
+- **Map** (`map`): The map to load on server start (default: "ndu" - Nacht der Untoten)
+- **Server Port (UDP)** (`sv_port`): UDP port for game connections (default: 27500)
+  - Must match the port configured in AMP's port settings
+- **Server Port (TCP/WebSocket)** (`sv_port_tcp`): TCP/WebSocket port for web client connections (default: 27501)
+  - Set to 0 to disable WebSocket support
+- **Server Hostname** (`hostname`): Display name for your server in the server browser (default: "NZP Server")
+- **Max Clients** (`maxclients`): Maximum number of players that can join the server (default: 8, max: 64)
+- **Public Server** (`sv_public`): Whether the server should be publicly listed in the server browser (default: true)
+- **Minimum Tick Rate** (`sv_mintic`): Minimum server tick rate in seconds (default: 0.045 = 45ms = ~22fps)
+  - Lower values = higher tickrate but more bandwidth
+- **Maximum Tick Rate** (`sv_maxtic`): Maximum server tick rate (default: 1000)
+  - Higher values = smoother gameplay but more CPU usage
 
 ## Usage
 
@@ -167,79 +113,85 @@ The template provides the following configurable settings through AMP's interfac
 
 ## Ports
 
-The template defines two ports that AMP will manage:
+The template defines one port that AMP will manage:
 
-- **UDP Port 27500**: Main game port (configurable)
-- **TCP Port 27501**: WebSocket port for web clients (configurable)
+- **UDP Port 27500**: Main game port for UDP connections (configurable via `sv_port` setting)
 
-Make sure these ports are open in your firewall if you want the server to be accessible from the internet.
+The WebSocket/TCP port (`sv_port_tcp`) is configured via the server settings but not managed by AMP's port system. Make sure the UDP port is open in your firewall if you want the server to be accessible from the internet.
 
 ## Troubleshooting
 
-### Server won't start
-- Verify that the `nzportable` binary is in the root directory
-- Check that the `nzp` folder exists with the required `.dat` files
-- Review the AMP console for error messages
+### Server won't start / "Unable to start the application" / Permission errors
 
-### Players can't connect
-- Ensure the UDP port is open in your firewall
-- Verify the server is set to public if you want it listed
-- Check that the protocol name matches your client version
+This error usually means the executable doesn't have execute permissions. Here's how to fix it:
+
+**Option 1: Using AMP File Manager**
+1. Go to your instance in AMP
+2. Navigate to **File Manager** → `serverfiles/`
+3. Find `nzportable64-sdl` (or whatever your executable is named)
+4. Right-click on it → **Properties** or **Change Permissions**
+5. Check the **Execute** permission box
+6. Save and try starting again
+
+**Option 2: Using SSH/Command Line (Recommended)**
+1. SSH into your server
+2. Navigate to the serverfiles directory:
+   ```bash
+   cd /home/amp/.ampdata/instances/[YOUR_INSTANCE_NAME]/nazi-zombies-portable/serverfiles/
+   ```
+   (Replace `[YOUR_INSTANCE_NAME]` with your actual instance name, e.g., `test01`)
+3. Set execute permissions:
+   ```bash
+   chmod +x nzportable64-sdl
+   ```
+4. Verify the file exists and has permissions:
+   ```bash
+   ls -lh nzportable64-sdl
+   ```
+   You should see something like `-rwxr-xr-x` (the `x` means executable)
+
+**Other things to check:**
+- Verify that the `nzportable64-sdl` binary is in the `serverfiles/` directory (not in a subdirectory)
+- Check that the `nzp` folder exists with the required `.dat` files (csprogs.dat, menu.dat, qwprogs.dat)
+- Review the AMP console/logs for more specific error messages
+- If you're using the SDL version (`nzportable64-sdl`), ensure SDL2 libraries are installed on your server
+
+### Players can't connect / SCTP/DTLS errors
+
+If you see errors like `SCTP Abort` or `DTLS Terminated` when players try to connect:
+
+1. **Set the Protocol Name** (Most Common Fix):
+   - The server needs the protocol name to match the client type
+   - For desktop clients: Use `NZP-REBOOT`
+   - For web clients: Use `NZP-REBOOT-WEB`
+   - **Quick Fix**: In your AMP instance console, run:
+     ```
+     set com_protocolname NZP-REBOOT
+     ```
+   - Or add to startup: `+com_protocolname NZP-REBOOT`
+
+2. **Verify Port Configuration**:
+   - Desktop clients connect via UDP (default port 27500)
+   - Web clients connect via WebSocket (different port/protocol)
+   - Ensure the correct port is open in your firewall
+   - Check that the port number matches between server and client
+
+3. **Check Client Type**:
+   - If using a web browser client, the server must support WebSocket connections
+   - Desktop clients should use UDP protocol
+   - Make sure the protocol name matches: `NZP-REBOOT` for desktop, `NZP-REBOOT-WEB` for web
+
+4. **Network Issues**:
+   - Ensure the UDP port is open in your firewall
+   - Verify the server is set to public if you want it listed
+   - Check NAT/port forwarding settings if behind a router
 
 ### Missing assets
-- Re-download and extract `pc-nzp-assets.zip`
-- Ensure QuakeC files (`fte-nzp-qc.zip` and `standard-nzp-qc.zip`) are extracted into the `nzp` directory
+- Verify the directory structure matches the one in [Prerequisites](#prerequisites)
+- Re-download and extract `pc-nzp-assets.zip` into `serverfiles/` to create the `nzp/` folder
+- Ensure QuakeC files (`fte-nzp-qc.zip` and `standard-nzp-qc.zip`) are extracted into `serverfiles/nzp/` directory
+- Check that you have the required `.dat` files in `serverfiles/nzp/` (csprogs.dat, menu.dat, qwprogs.dat, etc.)
 
-### Template not appearing in AMP
-- Verify the template files are in the correct location: `AMP/instances/GenericModule/templates/nzp/`
-- Ensure all three files are present: `nzp.kvp`, `nzpconfig.json`, `nzpmetaconfig.json`
-- Restart the AMP service to refresh the template list
-- Check file permissions to ensure AMP can read the template files
-
-### Git/Configuration Repository Errors
-If you encounter "fatal: not in a git directory" errors when adding the repository as a configuration source:
-- The template files have already been downloaded and are ready to use
-- You don't need to add it as a configuration repository - the template is already available
-- Simply create a new Generic Module instance and select "nzp" from the template dropdown
-- If you want automatic updates, ensure your GitHub repository is properly initialized with git and the files are committed
-
-### Template Not Appearing When Creating Instance
-**Important**: Generic Module is built-in to AMP and doesn't need to be enabled. Templates appear directly as applications, not under a "Generic Module" option.
-
-If you don't see "nzp" or "Nazi Zombies Portable" when creating a new instance:
-
-1. **Verify template location**:
-   - Templates should be in: `ADS/Plugins/ADSModule/DeploymentTemplates/`
-   - Files should be directly in this folder (not in a subdirectory)
-   - Ensure files are named exactly: `nzp.kvp`, `nzpconfig.json`, `nzpmetaconfig.json`
-   - Check file permissions - AMP needs read access to these files
-
-2. **Refresh templates** (CRITICAL STEP):
-   - Go to **Configuration** → **Instance Deployment** in AMP
-   - Click **"Fetch Latest"** or **"Update Templates"** button
-   - Wait for the process to complete (may take a minute)
-   - **Refresh your browser page** (F5 or Ctrl+R)
-
-3. **Check the application list**:
-   - When creating a new instance, scroll through the entire list of applications
-   - Look for **"nzp"** (lowercase) or **"Nazi Zombies Portable"** (full name)
-   - Templates appear as applications, not under a "Generic" category
-   - Try using the search/filter box if available
-
-4. **Verify template files are valid**:
-   - Check that `nzp.kvp` has proper formatting (no syntax errors)
-   - Ensure `nzpconfig.json` is valid JSON (you can validate at jsonlint.com)
-   - Check AMP logs for any errors about template loading
-
-5. **Alternative locations to check**:
-   - If using a configuration repository, templates may be in: `Plugins/GenericModule/templates/nzp/`
-   - Some AMP versions use: `instances/GenericModule/templates/`
-   - Check your AMP logs to see where it's looking for templates
-
-6. **If still not working**:
-   - Restart the AMP service completely
-   - Check AMP version - older versions may have different template locations
-   - Verify you have the latest template files from this repository
 
 ## Additional Resources
 
