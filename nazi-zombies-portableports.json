@@ -1,1 +1,41 @@
-[]
+[
+    {
+        "DisplayName": "Game Port (UDP)",
+        "PortNumber": 27500,
+        "Protocol": "UDP",
+        "PortType": "Static",
+        "ExternalPort": 0,
+        "InternalPort": 0,
+        "Description": "Main UDP port for game connections. Default is 27500. Configure via sv_port cvar.",
+        "FixedPort": false,
+        "AutoMap": true,
+        "Required": true,
+        "PortRef": "GamePort1"
+    },
+    {
+        "DisplayName": "Query Port",
+        "PortNumber": 27501,
+        "Protocol": "UDP",
+        "PortType": "Static",
+        "ExternalPort": 0,
+        "InternalPort": 0,
+        "Description": "Server query port for frag-net server browser. Used for server discovery.",
+        "FixedPort": false,
+        "AutoMap": true,
+        "Required": false,
+        "PortRef": "SteamQueryPort"
+    },
+    {
+        "DisplayName": "Remote Admin Port",
+        "PortNumber": 27502,
+        "Protocol": "TCP",
+        "PortType": "Static",
+        "ExternalPort": 0,
+        "InternalPort": 0,
+        "Description": "Remote administration port (if applicable). Not typically used by NZP servers.",
+        "FixedPort": false,
+        "AutoMap": true,
+        "Required": false,
+        "PortRef": "RemoteAdminPort"
+    }
+]

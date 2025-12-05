@@ -1,10 +1,11 @@
 {
     "id": "ef2a3a75-6100-437d-8607-a146fde2a81f",
     "authors": [
-        "l0cks-acab - Made with AMP Config Generator"
+        "l0cks-acab"
     ],
-    "origin": "https://github.com/l0cks-acab - Made with AMP Config Generator/AMPTemplates.git",
-    "url": "https://github.com/l0cks-acab - Made with AMP Config Generator/AMPTemplates",
+    "origin": "https://github.com/l0cks-acab/AMPTemplates.git",
+    "url": "https://github.com/l0cks-acab/AMPTemplates",
     "imagefile": "",
-    "prefix": "l0cks-acab - Made with AMP Config Generator"
+    "prefix": "",
+    "repotype": "AppTemplates"
 }
